@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Medical History</title>
+<script type="text/javascript">
+var url = "http://localhost:8080/mainproject/useraccess/userprofile/addmedhistory";
+ 	function addmedhistory() {
+ 		
+ 		var useremail = sessionStorage.getItem("useremail");
+ 		var relation = document.getElementById("relative").value;
+ 		var illness = document.getElementById("illness").value;
+ 		var doctorname = document.getElementById("doctorname").value;
+ 		var medicine = document.getElementById("medicine").value;
+ 		var startdate = document.getElementById("startdate").value;
+ 		var enddate = document.getElementById("enddate").value;
+ 		var dosage = document.getElementById("dosage").value;
+ 		var dosagefreq = document.getElementById("dosagefreq").value;
+ 		var dosagetime = document.getElementById("dosagetime").value;
+ 		request = new XMLHttpRequest();
+ 		request.open("POST",url,true);
+ 		request.onreadystatechange = function (){
+ 			if (request.readyState == 4 && request.status==200){
+ 				value = request.responseText;
+ 				console.log(value);
+ 				if (value==1){
+ 					document.getElementById("msg").innerHTML="Medical History Successfully registered ";
+ 					//location.href="viewprofilepage.html";
+ 				}
+ 				else{
+ 				document.getElementById("msg").innerHTML="Already Registered medical history ";}	
+ 			}		
+ 	}
+ 	request.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+ 	//sending it using form data
+ 	request.send("useremail="+useremail+"&relation="+relation+"&illness=" + illness + "&doctorname=" + doctorname + "&medicine="+medicine+ "&startdate="+startdate + "&enddate="+enddate + "&dosage="+dosage + "&dosagefreq="+dosagefreq + "&dosagetime=" +dosagetime);
+ 	return false;
+ 	}
+ 	
+ 	function viewmedhistory(){
+ 		console.log("hello")
+ 		var useremail = sessionStorage.getItem("useremail");
+ 		var relation = document.getElementById("rel").value;
+ 		 var url = "http://localhost:8080/mainproject/useraccess/userprofile/getmedhistory?useremail="+useremail+"&relation="+relation;
+ 		console.log(url);
+ 		request = new XMLHttpRequest();
+ 		request.open("GET",url,true);
+ 		request.onreadystatechange = function (){
+ 				if (request.readyState == 4 && request.status==200){
+ 					temp=request.responseText;
+ 					console.log(temp);
+ 					temp=JSON.parse(temp);
+ 					var len = Object.keys(temp).length;
+ 					console.log(len);
+ 					console.log(temp[0].relation)
+ 					console.log(temp[0].dosage)
+ 					var table = getElementById("medicallist")
+ 					var row = table.insertRow(0);
+ 					
+ 					
+ 					cell0 = row.insertCell(0);
+ 					cell1 = row.insertCell(1);
+ 					cell2 = row.insertCell(2);
+ 					cell3 = row.insertCell(3);
+ 					cell4 = row.insertCell(4);
+ 					cell5 = row.insertCell(5);
+ 					cell6 = row.insertCell(6);
+ 					cell7 = row.insertCell(7);
+ 					cell8 = row.insertCell(8);
+ 					cell9 = row.insertCell(9);
+ 					
+ 					
+ 					
+ 					cell0.innerHTML = "useremail";
+ 					cell1.innerHTML = "relation";
+ 					cell2.innerHTML = "illness";
+ 					cell3.innerHTML = "doctorname";
+ 					cell4.innerHTML = "medicine";
+ 					cell5.innerHTML = "startdate";
+ 					cell6.innerHTML = "enddate";
+ 					cell7.innerHTML = "dosage";
+ 					cell8.innerHTML = "dosagefreq";
+ 					cell9.innerHTML = "dosagetime";
+ 					
+ 					
+ 					for(var i=0;i<len;i++){
+ 						row = table.insertRow(i+1);
+ 						cell0 = row.insertCell(0);
+ 	 					cell1 = row.insertCell(1);
+ 	 					cell2 = row.insertCell(2);
+ 	 					cell3 = row.insertCell(3);
+ 	 					cell4 = row.insertCell(4);
+ 	 					cell5 = row.insertCell(5);
+ 	 					cell6 = row.insertCell(6);
+ 	 					cell7 = row.insertCell(7);
+ 	 					cell8 = row.insertCell(8);
+ 	 					cell9 = row.insertCell(9);
+ 	 				
+ 						cell0.innerHTML = temp[i].useremail;
+ 	 					cell1.innerHTML = temp[i].relation;
+ 	 					cell2.innerHTML = temp[i].illness;
+ 	 					cell3.innerHTML = temp[i].doctorName;
+ 	 					cell4.innerHTML = temp[i].medicine;
+ 	 					cell5.innerHTML = temp[i].startDate;
+ 	 					cell6.innerHTML = temp[i].endDate;
+ 	 					cell7.innerHTML = temp[i].dosage;
+ 	 					cell8.innerHTML = temp[i].dosageFrequency;
+ 	 					cell9.innerHTML = temp[i].dosageTime;
+ 					}
+ 				
+ 	}
+ 	}
+ 	request.send(null);		
+ 	return false;
+ 	}
+	function viewusermedhistory(){
+ 		var useremail = sessionStorage.getItem("useremail");
+ 		var url = "http://localhost:8080/mainproject/useraccess/userprofile/getusermedhistory?useremail="+useremail;
+ 		console.log(url)
+ 		request = new XMLHttpRequest();
+ 		request.open("GET",url,true);
+ 		request.onreadystatechange = function (){
+ 				if (request.readyState == 4 && request.status==200){
+ 					flank=request.responseText;
+ 					console.log(flank)
+ 					flank=JSON.parse(flank);
+ 					var len = Object.keys(flank).length;
+ 					console.log(len);
+ 					console.log(flank[0].relation)
+ 					console.log(flank[0].dosage)
+ 		
+ 	}
+ 	}
+ 	request.send(null);	
+ 	return false;	
+ 	}
+
+</script>
+</head>
+<body>
+<form method="get" action="" >
+Select Dependent : <select  id="rel" >
+			<option value="father">Father</option>
+			<option value="mother">Mother</option>
+			<option value="spouse">Spouse</option>
+			<option value="children">Children</option>
+			<option value="motherinlaw">Mother in Law</option>
+			<option value="fatherinlaw">Father in law</option></select><br><br>
+			
+<input type="button" value = "View Dependent's Medical History" onclick="return viewmedhistory()"><br><br>
+</form>
+
+<form method="get" action="" >
+<input type="button" value = "View your own Medical History" onclick="return viewusermedhistory()"><br><br><br><br>
+</form>
+
+<form method="post" action="" onsubmit=" return addmedhistory()">
+<span id="msg"></span>
+<table >
+<tr>
+	<td><input type="submit" value="Add Medical History"></td>
+	<td><select  id="relative" >
+			<option value="self">Self</option>
+			<option value="father">Father</option>
+			<option value="mother">Mother</option>
+			<option value="spouse">Spouse</option>
+			<option value="children">Children</option>
+			<option value="motherinlaw">Mother in Law</option>
+			<option value="fatherinlaw">Father in law</option></select></td>
+</tr>
+</table>
+<table>
+<tr>
+<td>Illness</td>  
+<td>Doctor Name</td> 
+<td>Medicine</td>
+<td>Start Date</td> 
+<td>End Date</td>
+<td>Dosage</td>
+<td>Dosage Frequency</td>  
+<td>Dosage Time</td>
+</tr>
+<tr>
+<td><input type="text" id="illness" size="4"></td>
+<td><input type="text" id="doctorname" size="8"></td>
+<td><input type="text" id="medicine" size="4"></td>
+<td><input type="text" id="startdate" size="4"></td>
+<td><input type="text" id="enddate" placeholder="LifeLong" value="LifeLong" size="4"></td>
+<td> <input type="text" id="dosage" size="4"></td>
+<td><input type="text" id="dosagefreq" size="12"></td>
+<td><input type="text" id="dosagetime" size="6"></td>
+<td>
+</table>
+<h3>Medical History Record is shown below:</h3>
+<table id="medicallist">
+</table>
+</form>
+</body>
+</html>

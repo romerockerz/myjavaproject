@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Register</title>
+<script type="text/javascript">
+var url = "http://localhost:8080/mainproject/useraccess/userprofile/adduser";
+	function saveuserInfo(){
+		var name = document.getElementById("username").value;
+		var email = document.getElementById("useremail").value;
+		var country = document.getElementById("usercountry").value;
+		var contact = document.getElementById("usercontact").value;
+		var dob = document.getElementById("userdob").value;
+		var pwd = document.getElementById("userpwd").value;
+		var cpwd = document.getElementById("usercurrpwd").value;
+		request = new XMLHttpRequest();
+		request.open('POST',url,true);
+		request.onreadystatechange = function (){
+			if (request.readyState == 4 && request.status==200){
+				value = request.responseText;
+				console.log("value");
+				if (value=="true"){
+					document.getElementById("msg").innerHTML="User Successfully registered ";
+					location.href="userlogin.html";
+				}
+				else{
+				document.getElementById("msg").innerHTML="Already Registered User ";}
+				
+			}		
+	}
+	request.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+	//sending it using form data
+	request.send("username=" + name + "&useremail="+email+"&usercountry="+country + "&usercontact="+contact + "&userdob="+dob + "&userpwd="+pwd);
+	return false;
+	}
+</script>
+</head>
+<body>
+<form method="post" action="" onsubmit="return saveuserInfo()">
+Name : <input type="text" id="username"><br>
+E-mail : <input type="text" id="useremail"><br>
+Country : <input type="text" id="usercountry"><br>
+Contact no : <input type="text" id="usercontact"><br>
+Date of Birth : <input type="text" id="userdob"><br>
+Password : <input type="text" id="userpwd"><br>
+Rewrite Password : <input type="text" id="usercurrpwd"><br>
+<input type="submit" value="Register User">
+</form>
+<span id="msg"></span>
+</body>
+</html>

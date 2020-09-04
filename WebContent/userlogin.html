@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login Page</title>
+<script type="text/javascript">
+var url =  "http://localhost:8080/mainproject/useraccess/userprofile/verifyuser";
+	function verifyuser(){
+		
+		var curremail = document.getElementById("useremail").value;
+		var currpassword = 	document.getElementById("userpwd").value;
+		var request =  new XMLHttpRequest();
+		request.open('POST',url,true);
+		request.onreadystatechange = function (){
+			if (request.status==200 && request.readyState==4){
+				result2= request.responseText;
+				console.log(result2);
+				if (result2 == 0){
+					document.getElementById("errormsg").innerHTML = "User not found, try again";
+					//location.href="userlogin.html"
+				} 
+				else if (result2== 2){
+					document.getElementById("errormsg").innerHTML = "Invalid Email/password combination";}
+				else {
+					sessionStorage.setItem("logged",true);
+					sessionStorage.setItem("useremail",curremail);
+					location.href="homepage.html";
+				}		
+		}
+		}	
+		request.setRequestHeader("content-type","application/x-www-form-urlencoded");
+		request.send("useremail="+ curremail+ "&userpwd="+currpassword);
+		return false;
+		
+	}
+</script>
+</head>
+<body>
+<h1>Login Page</h1>
+<form action="" onsubmit="return verifyuser()">
+Email ID : <input type="text" name="email" id="useremail"><br><br>
+Password : <input type="password" name="pwd" id="userpwd"><br><br>
+<input type="submit" value="login"><br>
+</form>
+<span id ="errormsg"> </span><br><br>
+<a href= "http://localhost:8080/mainproject/forgotpassworduser.html">Forgot Password</a>
+<a href="http://localhost:8080/mainproject/userregistration.html">New User?</a>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript">
+
+function addDependent(){
+	var url = "http://localhost:8080/mainproject/useraccess/userprofile/adddependent";
+	var useremail = sessionStorage.getItem("useremail");
+	var relation = document.getElementById("relation").value;
+	var email = document.getElementById("email").value;
+	var name = document.getElementById("name").value;
+	var contact = document.getElementById("contact").value;
+	var dob = document.getElementById("dob").value;
+	request = new XMLHttpRequest();
+	request.open("POST",url,true);
+	request.onreadystatechange = function (){
+		if (request.readyState == 4 && request.status==200){
+			value = request.responseText;
+			console.log(value);
+			if (value==1){
+				document.getElementById("msg").innerHTML="Dependent Successfully registered ";
+				location.href="homepage.html";
+			}
+			else{
+			document.getElementById("msg").innerHTML="Already Registered dependent ";}
+			
+		}		
+}
+request.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+//sending it using form data
+request.send("relation=" + relation + "&name=" + name + "&email="+email+ "&contact="+contact + "&dob="+dob + "&useremail="+useremail);
+return false;
+}
+ function getDependent(){
+	
+	 var useremail = sessionStorage.getItem("useremail");
+	 var relation = document.getElementById("dep").value;
+	 var url = "http://localhost:8080/mainproject/useraccess/userprofile/getdependent?useremail="+useremail+"&relation="+relation;
+	 request = new XMLHttpRequest();
+		request.open("GET",url,true);
+		request.onreadystatechange = function (){
+			if (request.readyState == 4 && request.status==200){
+				user = request.responseText;
+				console.log(user);
+				user = JSON.parse(user);
+				if (user!=null){
+				document.getElementById("relation").value=user.relationship;
+				document.getElementById("name").value=user.name;
+				document.getElementById("email").value=user.email;
+				document.getElementById("contact").value=user.contact;
+				document.getElementById("dob").value=user.dob;
+				
+				document.getElementById("addmsg").innerHTML= "The dependent information is as follows :"
+				}else {
+				document.getElementById("addmsg").innerHTML= "The dependent information is not available :"	
+				}
+			}		
+	}
+	//request.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+	//sending it using form data
+	request.send(null);
+	return false;
+	}
+ 
+</script>
+</head>
+<body>
+<form method="get" action="" onsubmit="return getDependent()"> 
+View Dependent :  <select name="dependent" id="dep" >
+<option value="father">Father</option>
+<option value="mother">Mother</option>
+<option value="spouse">Spouse</option>
+<option value="children">Children</option>
+<option value="motherinlaw">Mother in Law</option>
+<option value="fatherinlaw">Father in law</option>
+</select><br><br>
+<input type="submit" value="Get Dependent Information">
+</form><br><br>
+<span id="addmsg"></span><br><br>
+<form method="post" action="" onsubmit="return addDependent()">
+Relationship : <select  id="relation" >
+<option value="father">Father</option>
+<option value="mother">Mother</option>
+<option value="spouse">Spouse</option>
+<option value="children">Children</option>
+<option value="motherinlaw">Mother in Law</option>
+<option value="fatherinlaw">Father in law</option>
+</select><br><br>
+Name : <input type="text" id="name"><br><br>
+Email : <input type="text" id="email"><br><br>
+Contact : <input type="text" id="contact"><br><br>
+Date of Birth : <input type="text" id="dob"><br><br>
+<input type="submit" value = "Add Dependent"><br><br>
+</form>
+</body>
+<h1><span id="msg"></span></h1>
+<a href="addmedicalhistory.html"><button type="button">Medical History</button></a>
+</html>

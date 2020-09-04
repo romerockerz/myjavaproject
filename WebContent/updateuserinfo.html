@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit Info Page </title>
+<script type="text/javascript">
+	window.onload = function(){
+	useremail = sessionStorage.getItem("useremail");
+	document.getElementById("useremail").value = useremail;
+	var url="http://localhost:8080/mainproject/useraccess/userprofile/getuser/" +useremail;
+	let request = new XMLHttpRequest();
+	request.open("GET", url, true);
+	request.onreadystatechange = function(){
+		if (request.status=200 && request.readyState==4){
+			var user = request.responseText;
+			console.log(user);
+			user = JSON.parse(user);
+			document.getElementById("username").value=user.name;
+			document.getElementById("usercountry").value=user.country;
+			document.getElementById("usercontact").value=user.contact;
+			document.getElementById("userdob").value=user.dob;
+			document.getElementById("userpwd").value=user.password;		
+		}
+	}
+	request.send(null);
+	}
+	
+	function updateuserinfo (){
+		var url = "http://localhost:8080/mainproject/useraccess/userprofile/updateuser";
+		var name = document.getElementById("username").value;
+		var email = document.getElementById("useremail").value;
+		var country = document.getElementById("usercountry").value;
+		var contact = document.getElementById("usercontact").value;
+		var dob = document.getElementById("userdob").value;
+		var pwd = document.getElementById("userpwd").value;
+		let request = new XMLHttpRequest();
+		request.open('PUT',url,true);
+		request.onreadystatechange = function (){
+			if (request.readyState == 4 && request.status==200){
+				value = request.responseText;
+				console.log("value");
+				if (value=="1"){
+					document.getElementById("msg").innerHTML="User Information Successfully updated ";
+					location.href="userlogin.html";
+				}
+				else{
+				alert("ProfileUpdated");
+				
+			}		
+	}
+	}
+	request.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+	//sending it using form data
+	request.send("username=" + name + "&useremail="+email+"&usercountry="+country + "&usercontact="+contact + "&userdob="+dob + "&userpwd="+pwd);
+	return false;
+	}
+
+</script>
+</head>
+<body>
+<h1>Edit User Information</h1>
+<form method="post" action="" onsubmit="return updateuserinfo()">
+Name : <input type="text" id="username"><br><br>
+E-mail : <input type="text" id="useremail" readonly="readonly"><br><br>
+Country : <input type="text" id="usercountry"><br><br>
+Contact no : <input type="text" id="usercontact"><br><br>
+Date of Birth : <input type="text" id="userdob"><br><br>
+Password : <input type="text" id="userpwd" readonly="readonly"><br><br>
+<table>
+<tr>
+	<td><input type="submit" value="Register User"></td>
+	<td><input type="reset" value="Clear data"></td>
+	<td><a href='http://localhost:8080/mainproject/homepage.html'><button type="button">Cancel</button></a>
+</tr>	
+</table><br><br>
+</form>
+<span id="msg"></span>
+</body>
+</html>

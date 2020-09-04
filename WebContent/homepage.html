@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Home Page</title>
+<script type="text/javascript" src="loggoff.js"></script>
+<script type="text/javascript">
+	window.onload = function(){
+	logvalue =  sessionStorage.getItem("logged")
+	if (logvalue==false){
+		location.href = "userlogin.html";}
+	else{
+		document.getElementById("out").innerHTML= sessionStorage.getItem("useremail");
+	}
+	}
+</script>
+</head>
+<body>
+<h1>user profile and data page</h1><br>
+<h1>Welcome <span id="out"></span></h1>
+<a href="updateuserinfo.html"><button type="button">Update Information</button></a>
+<a href="resetpassword.html"><button type="button">Reset Password</button></a>
+<a href="viewprofilepage.html"><button type="button">My Profile</button></a>
+<a href="javascript:loggoff()">Log-Out</a>
+</body>
+</html>
